@@ -3,6 +3,8 @@
 336,319,284 -- White
 939 -- Total val of White
 Thershold value -- 524
+250-grey
+330-between grey and white 
 
 ---------------------------- Sensor 3
 33,35,22 -- Black
