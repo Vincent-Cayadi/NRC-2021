@@ -135,25 +135,29 @@ Sub checkColor
 EndSub
 
 Sub collection
-  ' Program.Delay(200)
-  ' If fullLevel = 0 Then
-  '   Motor.Move("A", 50, -120, "True")
-  '   Motor.MoveSync("BC",-20,-20,85,"True")
-  '   Program.Delay(20)
-  '   Motor.MoveSync("BC",20,-20,140,"True")
-  '   Program.Delay(20)
-  '   Motor.MoveSync("BC",20,20,100,"True")
-  '   Program.Delay(20)
-  '   Motor.Start("A",-80)
-  '   Program.Delay(500)
-  '   Motor.Start("A",80)
-  '   Program.Delay(500)
-  '   Motor.MoveSync("BC",20,20,100,"True")
-  '   Program.Delay(20)
-  '   Motor.Start("A",-50)
-  '   Program.Delay(500)
-  '   fullLevel = fullLevel + 1
-  ' Else
+  Program.Delay(200)
+  If fullLevel = 0 Then
+    Motor.Move("A", 50, -120, "True")
+    While lightVal[1]
+      
+    EndWhile
+    ' Motor.MoveSync("BC",-20,-20,85,"True")
+    ' Program.Delay(20)
+    ' Motor.MoveSync("BC",20,-20,150,"True")
+    ' Program.Delay(20)
+    ' Motor.MoveSync("BC",20,20,100,"True")
+    ' Program.Delay(20)
+    ' Motor.Start("A",-80)
+    ' Program.Delay(500)
+    ' Motor.Start("A",80)
+    ' Program.Delay(500)
+    ' Motor.MoveSync("BC",20,20,100,"True")
+    ' Program.Delay(20)
+    ' Motor.Start("A",-50)
+    ' Program.Delay(500)
+    fullLevel = fullLevel + 1
+    goBack()
+  Else
     Motor.Move("D", 50, -120, "True")
     Program.Delay(20)
     Motor.MoveSync("BC",0,-20,130,"True")
@@ -170,7 +174,11 @@ Sub collection
     Motor.Start("D",-50)
     Program.Delay(500)
     fullLevel = fullLevel + 1
-  ' EndIf 
+  EndIf 
+EndSub
+
+Sub goBack
+  Motor.MoveSync("BC",20,20,140,"True")
 EndSub
 
 '8/25/2021
