@@ -1,0 +1,12 @@
+'PID 90 Degree Turn
+Turn = 150
+TPT = -50
+KpT = 0.005 '0.005
+KdT = 0.35 '0.
+Last_ErrorT = 0
+Sub PD_Turn
+  Error = Motor.GetCount("BC") - Turn
+  Correction = (Error * KpT) + (Error - Last_Error)*KdT
+  Motor.StartSync("BC",Math.Max(Math.Min((TPT - Correction),100),-100),Math.Max(Math.Min((TPT + Correction),100),-100)*-1)
+  Last_ErrorT = Error
+EndSub

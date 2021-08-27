@@ -1,0 +1,8 @@
+Motor.Invert("B")
+Sensor.SetMode(4,2)
+carValue = 0
+
+While rawValue <> 5
+  rawValue=Sensor.ReadRaw(4,1)  
+  Motor.StartPower("BC",100)
+EndWhile

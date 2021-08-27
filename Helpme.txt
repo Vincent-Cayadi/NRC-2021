@@ -1,0 +1,12 @@
+41, 44, 24 -- Black
+109 -- Total val of Black
+336,319,284 -- White
+939 -- Total val of White
+Thershold value -- 524
+
+---------------------------- Sensor 3
+33,35,22 -- Black
+90 -- Total val of Black
+369,374,245 -- White
+986 -- Total val of White
+Thershold value -- 538

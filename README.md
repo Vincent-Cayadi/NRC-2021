@@ -1,2 +1,2 @@
 # NRC-2021
-NRC 2021
+ I hate NRC
