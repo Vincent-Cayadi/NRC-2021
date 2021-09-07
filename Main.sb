@@ -3,7 +3,7 @@ Motor.Invert("B")
 
 TotalRGBTH[0] = 524 'TH Value of Sensor 2
 TotalRGBTH[1] = 538 'TH Value of Sensor 3
-TotalRGBGGTH[1] = 310
+TotalRGBGGTH[1] = 306
 lightVal[0] = 0
 lightVal[1] = 0
 
@@ -15,6 +15,7 @@ Error[1] = 0
 
 TP[0] = 100 '100
 TP[1] = 20
+TP[3] = 30
 
 Kp[0] = 0.12 '0.12
 Ki[0] = 0.005 '0.005
@@ -88,16 +89,9 @@ fullLevel =  0
 '   EndIf
 ' EndWhile
 
-secondSection()
-
-' For number = 0 To 3
-'   LCD.Clear()
-'   LCD.text(1,0,55,2,carpark[number])'First letter will be at (45,60) on LCD
-'   Program.Delay(3000)
-'   LCD.Clear()
-'   LCD.text(1,0,55,2,"Wait")
-'   Program.Delay(1000)
-' EndFor
+While counter <= 6
+  checkColortwo()
+EndWhile
 
 Sub readVal
   rawValue = Sensor.ReadRaw(2,3)
@@ -123,10 +117,11 @@ Sub PDtwo
 EndSub
 
 Sub PDGG 'Sensor 3
-  Error[0] = lightVal[0] - TotalRGBGGTH[0]
+  Error[0] = lightVal[1] - TotalRGBGGTH[1]
   Intergal[0] = Error[0] + Intergal[0]*0.5
   Correction = (Error[0] * Kp[0]) + (Error[0] - Last_Error[0])*Kd[0] + Intergal[0]*Ki[0]
-  Motor.StartSync("BC",Math.Max(Math.Min((TP[0] + Correction),100),-100),Math.Max(Math.Min((TP[0] - Correction),100),-100))
+  Correction = Correction * -1
+  Motor.StartSync("BC",Math.Max(Math.Min((TP[3] + Correction),100),-100),Math.Max(Math.Min((TP[3] - Correction),100),-100))
   Last_Error = Error
 EndSub
 
@@ -147,29 +142,63 @@ Sub checkWhitetwo
   counter = counter + 1
 EndSub
 
+
 Sub checkColor
-  carValue = Sensor.ReadRaw(4,1)
-  carColor = carValue[0]
+  ' carValue = Sensor.ReadRaw(4,1)
+  ' carColor = carValue
+  ' If carColor = 2 Then
+  '   'Speaker.Note(100,"F7",20)
+  '   Program.Delay(20)
+  '   carpark[counter - 1] = carColor
+  '   collection()
+  ' ElseIf carColor = 3 Then
+  '   'Speaker.Note(100,"C7",20)
+  '   Program.Delay(20)
+  '   carpark[counter - 1] = carColor
+  '   collection()
+  ' ElseIf carColor = 4 Then
+  '   'Speaker.Note(100,"E7",20)
+  '   Program.Delay(20)
+  '   carpark[counter - 1] = carColor
+  '   collection()
+  ' ElseIf carColor = 5 Then
+  '   'Speaker.Note(100,"D7",20)
+  '   Program.Delay(20)
+  '   carpark[counter - 1] = carColor
+  '   collection()
+  ' EndIf
+EndSub
+
+Sub checkColortwo
+  carValuetwo = Sensor.ReadRawValue(4,0)
+  carColor = carValuetwo
   If carColor = 2 Then
-    'Speaker.Note(100,"F7",20)
-    Program.Delay(20)
-    carpark[counter - 1] = carColor
-    collection()
+    Speaker.Note(100,"C7",20)
+    Program.Delay(10)
+    waitingCar[counter] = 2
+    counter = counter + 1
+    Motor.MoveSync("BC",20,20,160,"True")
   ElseIf carColor = 3 Then
-    'Speaker.Note(100,"C7",20)
-    Program.Delay(20)
-    carpark[counter - 1] = carColor
-    collection()
+    Speaker.Note(100,"D7",20)
+    Program.Delay(10)
+    waitingCar[counter] = 3
+    counter = counter + 1
+    Motor.MoveSync("BC",20,20,160,"True")
   ElseIf carColor = 4 Then
-    'Speaker.Note(100,"E7",20)
-    Program.Delay(20)
-    carpark[counter - 1] = carColor
-    collection()
+    Speaker.Note(100,"E7",20)
+    Program.Delay(10)
+    waitingCar[counter] = 4
+    counter = counter + 1
+    Motor.MoveSync("BC",20,20,160,"True")
   ElseIf carColor = 5 Then
-    'Speaker.Note(100,"D7",20)
-    Program.Delay(20)
-    carpark[counter - 1] = carColor
-    collection()
+    Speaker.Note(100,"F7",20)
+    Program.Delay(10)
+    waitingCar[counter] = 5
+    counter = counter + 1
+    Motor.MoveSync("BC",20,20,160,"True")
+  Else
+    readVal()
+    PDGG()
   EndIf
 EndSub
 
@@ -244,13 +273,18 @@ Sub secondSection
     EndIf
   EndWhile
   Program.Delay(200)
-  Motor.MoveSync("BC",25,25,200,"True")
-  readVal()
-  While lightVal[1] >= 524
+  Motor.MoveSync("BC",20,20,180,"True")
+  Motor.MoveSync("BC",20,0,180,"True")
+  While lightVal[1] <= 586
     readVal()
-    Motor.StartSync("BC",15,-15)    
+    Motor.StartSync("BC",50,0)
   EndWhile
-  counter = 0
+  Motor.MoveSync("BC",20,0,100,"True")
+  Program.Delay(200)
+  While lightVal[1] <= 242
+    readVal()
+    Motor.StartSync("BC",20,0)
+  EndWhile
   While "True"
     readVal()
     PDGG()
