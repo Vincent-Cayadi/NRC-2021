@@ -1,0 +1,44 @@
+Motor.Invert("A")
+Motor.Invert("B")
+
+TotalRGBTH[0] = 555 'TH Value of Sensor 2
+TotalRGBTH[1] = 560 'TH Value of Sensor 3
+TotalRGBGGTH[1] = 306
+lightVal[0] = 0
+lightVal[1] = 0
+
+Last_Error[0] = 0
+Error[0] = 0
+
+Last_Error[1] = 0
+Error[1] = 0
+
+TP[0] = 100 '100
+
+Kp[0] = 0.12 '0.12
+Ki[0] = 0.005 '0.005
+Kd[0] = 0.4 '0.4
+
+Intergal[0] = 0
+Intergal[1] = 0
+
+While "True"
+  readVal()
+  PD()
+EndWhile
+
+
+Sub readVal
+  rawValue = Sensor.ReadRaw(2,3)
+  rawValuei = Sensor.ReadRaw(3,3)
+  lightVal[0] = rawValue[0] + rawValue[1] + rawValue[2]
+  lightVal[1] = rawValuei[0] + rawValuei[1] + rawValuei[2]
+EndSub
+
+Sub PD
+  Error[0] = lightVal[0] - TotalRGBTH[0]
+  Intergal[0] = Error[0] + Intergal[0]*0.5
+  Correction = (Error[0] * Kp[0]) + (Error[0] - Last_Error[0])*Kd[0] + Intergal[0]*Ki[0]
+  Motor.StartSync("BC",Math.Max(Math.Min((TP[0] + Correction),100),-100),Math.Max(Math.Min((TP[0] - Correction),100),-100))
+  Last_Error = Error
+EndSub
