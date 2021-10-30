@@ -1,0 +1,7 @@
+min_speed = 20
+max_speed = 100
+distance = 100
+kp = 1
+
+Count = Motor.Getcount("B")
+

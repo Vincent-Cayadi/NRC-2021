@@ -1,8 +1,8 @@
 Motor.Invert("A")
 Motor.Invert("B")
 
-TotalRGBTH[0] = 509 'TH Value of Sensor 2
-TotalRGBTH[1] = 550 'TH Value of Sensor 3
+TotalRGBTH[0] = 517 'TH Value of Sensor 2
+TotalRGBTH[1] = 545 'TH Value of Sensor 3
 TotalRGBGGTH[1] = 306
 lightVal[0] = 0
 lightVal[1] = 0
