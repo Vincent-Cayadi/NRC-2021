@@ -84,32 +84,32 @@ EndWhile
 resetKicker()
 collectionRight()
 resetKicker()
-counter = 0
-While counter < 2
-  readVal()
-  PD()
-  If lightVal[1] <= 120 Then
-    checkWhite()
-  EndIf
-EndWhile
-resetKicker()
-collectionLeft()
-OpenKicker()
-Motor.MoveSync("BC",100,100,40,"True")
-resetKicker()
-Motor.MoveSync("BC",100,100,40,"True")
-Motor.MoveSync("BC",-100,100,100,"True")
-counter = 0
-While counter < 1
-  readVal()
-  If lightVal[0] <= 517 Then
-    readVal()
-    Motor.MoveSync("BC", -100, 100,40,"True")
-    counter = counter + 1
-  Else
-    Motor.StartSync("BC", -100, 100)
-  EndIf
-EndWhile
+' counter = 0
+' While counter < 2
+'   readVal()
+'   PD()
+'   If lightVal[1] <= 120 Then
+'     checkWhite()
+'   EndIf
+' EndWhile
+' resetKicker()
+' collectionLeft()
+' OpenKicker()
+' Motor.MoveSync("BC",100,100,40,"True")
+' resetKicker()
+' Motor.MoveSync("BC",100,100,40,"True")
+' Motor.MoveSync("BC",-100,100,100,"True")
+' counter = 0
+' While counter < 1
+'   readVal()
+'   If lightVal[0] <= 517 Then
+'     readVal()
+'     Motor.MoveSync("BC", -100, 100,40,"True")
+'     counter = counter + 1
+'   Else
+'     Motor.StartSync("BC", -100, 100)
+'   EndIf
+' EndWhile
 
 ' While lightVal[0] >= 517 
 '   Motor.StartSync("BC",100,100)
@@ -206,7 +206,7 @@ Sub collectionRight
   Motor.Stop("D", "True")
   Motor.Start("D",-30)
   Program.Delay(200)
-  Motor.MoveSync("BC",20,20,10,"True")
+  Motor.MoveSync("BC",-20,-20,10,"True")
   Motor.MoveSync("BC",-20,20,120,"True")
   Motor.Start("D",30)
   Program.Delay(80)
