@@ -72,7 +72,7 @@ fullLevel =  0
 '#########################################################
 
 resetKicker()
-Motor.MoveSync("BC", 55, 20, 585, "True")
+Motor.MoveSync("BC", 40, 15, 620, "True")
 
 While counter < 3
   readVal()
@@ -82,48 +82,46 @@ While counter < 3
   EndIf
 EndWhile
 resetKicker()
-'collectionRight()
-collectionLeft()
+collectionRight()
+OpenKicker()
+Motor.MoveSync("BC",20,20,80,"True")
 resetKicker()
-' counter = 0
-' While counter < 2
-'   readVal()
-'   PD()
-'   If lightVal[1] <= 120 Then
-'     checkWhite()
-'   EndIf
-' EndWhile
-' resetKicker()
-' collectionLeft()
-' OpenKicker()
-' Motor.MoveSync("BC",100,100,40,"True")
-' resetKicker()
-' Motor.MoveSync("BC",100,100,40,"True")
-' Motor.MoveSync("BC",-100,100,100,"True")
-' counter = 0
-' While counter < 1
-'   readVal()
-'   If lightVal[0] <= 517 Then
-'     readVal()
-'     Motor.MoveSync("BC", -100, 100,40,"True")
-'     counter = counter + 1
-'   Else
-'     Motor.StartSync("BC", -100, 100)
-'   EndIf
-' EndWhile
-
-' While lightVal[0] >= 517 
-'   Motor.StartSync("BC",100,100)
-' EndWhile
-' counter = 0
-' While counter < 2
-'   readVal()
-'   PD()
-'   If lightVal[1] <= 120 Then
-'     checkWhite()
-'   EndIf
-' EndWhile
-
+counter = 0
+While counter < 2
+  readVal()
+  PD()
+  If lightVal[1] <= 120 Then
+    checkWhite()
+  EndIf
+EndWhile
+resetKicker()
+collectionLeft()
+OpenKicker()
+Motor.MoveSync("BC",100,100,40,"True")
+resetKicker()
+Motor.MoveSync("BC",-40,40,180,"True")
+Program.Delay(200)
+Motor.MoveSync("BC",0,40,200,"True")
+While lightVal[0] >= 800
+  Motor.StartSync("BC",0,100)
+EndWhile
+Motor.MoveSync("BC",0,40,40,"True")
+Program.Delay(200)
+readVal()
+While lightVal[0] < 700
+  readVal()
+  Motor.StartSync("BC",-40,40)
+EndWhile
+Motor.MoveSync("BC",40,0,80,"True")
+counter = 0
+While counter < 2
+  readVal()
+  PD()
+  If lightVal[1] <= 120 Then
+    checkWhite()
+  EndIf
+EndWhile
+returnLeft()
 '#########################################################
 Sub OpenKicker
   Motor.Start("AD",100)
@@ -176,18 +174,15 @@ Sub collectionLeft
   'checkColor()
   Motor.Move("A", 50, 120, "True")
   Motor.MoveSync("BC", 15, 15, 15, "True")
-  Motor.MoveSync("BC",0,-100,300,"True")
+  Motor.MoveSync("BC",0,-40,340,"True")
   Motor.MoveSync("BC", 15, 15, 150, "True")
-  Program.Delay(200)
   Motor.Start("A", -30)
-  Program.Delay(800)
+  Program.Delay(300)
   Motor.Stop("A", "True")
   Motor.Move("A", 50, 120, "True")
-  Program.Delay(200)
   Motor.MoveSync("BC", 15, 15, 100, "True")
-  Program.Delay(200)
   Motor.Start("A", -30)
-  Program.Delay(400)
+  Program.Delay(300)
   Motor.Stop("A", "True")
   Motor.MoveSync("BC",20,20,10,"True")
   Motor.MoveSync("BC",-100,-100,200,"True")
@@ -198,27 +193,22 @@ EndSub
 Sub collectionRight
   'checkColor()
   Motor.Move("D", 50, 120, "True")
-  Program.Delay(500)
-  Motor.MoveSync("BC", 0, -100, 180, "True")
+  Motor.MoveSync("BC", 0, -40, 180, "True")
   Motor.MoveSync("BC", 0, -30, 40, "True")
   Motor.MoveSync("BC",15,15,120,"True")   
   Motor.Start("D", -30)
-  Program.Delay(100)
+  Program.Delay(300)
   Motor.Stop("D", "True")
   Motor.Start("D",-30)
-  Program.Delay(200)
+  Program.Delay(80)
   Motor.MoveSync("BC",-20,-20,10,"True")
   Motor.MoveSync("BC",-20,20,120,"True")
-  Motor.Start("D",30)
-  Program.Delay(80)
-  Motor.MoveSync("BC",20,20,180,"True")
-  Motor.MoveSync("BC",20,-20,20,"True")
   fullLevel = fullLevel + 1
 EndSub
 
 Sub returnLeft
   Motor.MoveSync("BC", 15, 15, 80, "True")
-  Motor.MoveSync("BC",0,-100,400,"True")
+  Motor.MoveSync("BC",0,-40,400,"True")
   Motor.Move("A", 50, 120, "True")
   Motor.MoveSync("BC", 100, 100, 170, "True")
   Program.Delay(200)
@@ -230,7 +220,7 @@ EndSub
 
 Sub returnRight
   Motor.MoveSync("BC", 15, 15, 80, "True")
-  Motor.MoveSync("BC",0,-100,360,"True")
+  Motor.MoveSync("BC",0,-40,360,"True")
   Motor.Move("D", 50, 120, "True")
   Motor.MoveSync("BC", 100, 100, 170, "True")
   Program.Delay(200)
