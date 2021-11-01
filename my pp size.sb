@@ -82,7 +82,8 @@ While counter < 3
   EndIf
 EndWhile
 resetKicker()
-collectionRight()
+'collectionRight()
+collectionLeft()
 resetKicker()
 ' counter = 0
 ' While counter < 2
@@ -189,8 +190,8 @@ Sub collectionLeft
   Program.Delay(400)
   Motor.Stop("A", "True")
   Motor.MoveSync("BC",20,20,10,"True")
-  Motor.MoveSync("BC",-100,-100,230,"True")
-  Motor.MoveSync("BC",-20,20,120,"True")
+  Motor.MoveSync("BC",-100,-100,200,"True")
+  Motor.MoveSync("BC",-20,20,140,"True")
   fullLevel = fullLevel + 1
 EndSub
 
