@@ -94,7 +94,7 @@ Motor.MoveSync("BC",40,0,350,"True")
 readVal()
 While lightVal[0] <=110
   readVal()
-  Motor.StartSync("BC",20,0)
+  Motor.StartSync("BC",20,-20)
 EndWhile
 While counter < 3 '3
   readVal()
@@ -107,10 +107,19 @@ Motor.Stop("BC","True") 'Do not fucking remove
 Program.Delay(200)
 resetKicker()
 collectionRight()
+Motor.Stop("BC","True") 'Do not fucking remove
+Program.Delay(200)
 OpenKicker()
 Motor.MoveSync("BC",20,20,100,"True")
+Motor.Stop("BC","True")
 resetKicker()
 readVal()
+While lightVal[0] <= 110
+  readVal()
+  Motor.StartSync("BC",40,0)
+EndWhile
+Motor.Stop("BC","True") 'Do not fucking remove
+Program.Delay(200)
 counter = 0
 While counter < 2
   readVal()
@@ -120,7 +129,6 @@ While counter < 2
   EndIf
 EndWhile
 Motor.Stop("BC","True") 'Do not fucking remove
-Program.Delay(200)
 resetKicker()
 Motor.Stop("BC","True") 'Do not fucking remove
 collectionLeft()
@@ -138,9 +146,9 @@ While lightVal[0] <= 110
   Motor.StartSync("BC",0,40)
 EndWhile
 Motor.Stop("BC","True")
-Motor.MoveSync("BC",0,40,90,"True")
+Motor.MoveSync("BC",0,40,70,"True")
 Motor.Stop("BC","True")
-TP[0] = 70
+TP[0] = 60
 counter = 0
 While counter < 2
   readVal()
@@ -152,16 +160,45 @@ EndWhile
 Motor.Stop("BC","True")
 returnLeft()
 Motor.Stop("BC","True")
-Motor.MoveSync("BC",-20,-20,400,"True")
-readVal()
-While lightVal[1] <= 90
-  readVal()
-  Motor.StartSync("BC",-20,-20)
-  Speaker.Note(100,"B7",20)
-EndWhile
+
 Motor.Stop("BC","True")
 collectionLeft()
 Motor.Stop("BC","True")
+' Havent do the collect the other part
+TP[0] = 100
+counter = 0
+While counter < 3
+  readVal()
+  PD()
+  If lightVal[1] <= 120 Then
+    checkWhite()
+  EndIf
+EndWhile
+Motor.Stop("BC","True")
+Program.Delay(200)
+Motor.MoveSync("BC",40,0,380,"True")
+Motor.Stop("BC","True")
+Program.Delay(200)
+Motor.MoveSync("BC",20,20,120,"True")
+Motor.Stop("BC","True")
+Program.Delay(200)
+Motor.MoveSync("BC",0,40,320,"True")
+Motor.Stop("BC","True")
+Program.Delay(200)
+Motor.MoveSync("BC",0,40,320,"True")
+Motor.Stop("BC","True")
+Program.Delay(200)
+resetKicker()
+readVal()
+While lightVal[1] <= 110
+  readVal()
+  Motor.StartSync("BC",40,0)
+EndWhile
+Motor.Stop("BC","True")
+Program.Delay(200)
+Motor.MoveSync("BC",40,0,40,"True")
+Motor.Stop("BC","True")
+Program.Delay(200)
 '#########################################################
 Sub OpenKicker
   Motor.Start("AD",100)
@@ -232,7 +269,7 @@ Sub collectionLeft
   Motor.Stop("BC","True")
   Motor.MoveSync("BC",-20,-20,200,"True")
   Motor.Stop("BC","True")
-  Motor.MoveSync("BC",-20,20,120,"True")
+  Motor.MoveSync("BC",-20,20,130,"True")
   Motor.Stop("BC","True")
   fullLevel = fullLevel + 1
 EndSub
@@ -261,10 +298,10 @@ Sub returnLeft
   Motor.MoveSync("BC", 20, 20, 130, "True")
   Motor.MoveSync("BC",20,-20,200,"True")
   Motor.Move("A", 50, 120, "True")
-  Motor.MoveSync("BC", 20, 20, 220, "True")
+  Motor.MoveSync("BC", 20, 20, 140, "True")
   Motor.Stop("BC","True")
   Program.Delay(80)
-  Motor.MoveSync("BC", -20, -20, 220, "True")
+  Motor.MoveSync("BC", -20, -20, 140, "True")
   Motor.Stop("BC","True")
   Motor.MoveSync("BC", -20, 20, 170, "True")
   resetKicker()
@@ -274,10 +311,10 @@ Sub returnRight
   Motor.MoveSync("BC", 20, 20, 130, "True")
   Motor.MoveSync("BC",20,-20,200,"True")
   Motor.Move("D", 50, 120, "True")
-  Motor.MoveSync("BC", 20, 20, 180, "True")
+  Motor.MoveSync("BC", 20, 20, 140, "True")
   Motor.Stop("BC","True")
   Program.Delay(80)
-  Motor.MoveSync("BC", -20, -20, 180, "True")
+  Motor.MoveSync("BC", -20, -20, 140, "True")
   Motor.Stop("BC","True")
   Motor.MoveSync("BC", -20, 20, 170, "True")
   resetKicker()
