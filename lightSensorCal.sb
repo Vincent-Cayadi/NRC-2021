@@ -1,7 +1,7 @@
 Sensor.SetMode(2,4)
 
 While "True"  
-  rawValue = Sensor.ReadRaw(2s,3)
+  rawValue = Sensor.ReadRaw(2,3)
   lightVal = rawValue[0] + rawValue[1] + rawValue[2]
   TextWindow.WriteLine(lightVal)
 EndWhile

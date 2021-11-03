@@ -16,7 +16,7 @@
 Motor.Invert("A")
 Motor.Invert("B")
 
-TotalRGBTH[0] = 517 'TH Value of Sensor 2
+TotalRGBTH[0] = 505 'TH Value of Sensor 2
 TotalRGBTH[1] = 545 'TH Value of Sensor 3
 TotalRGBGGTH[1] = 306
 lightVal[0] = 0
@@ -30,9 +30,9 @@ Error[1] = 0
 
 TP[0] = 100 '100
 
-Kp[0] = 0.12 '0.12
-Ki[0] = 0.005 '0.005
-Kd[0] = 0.4 '0.4
+Kp[0] = 0.08 '0.08
+Ki[0] = 0.0008 '0.005
+Kd[0] = 0.8 '0.4
 
 Intergal[0] = 0
 Intergal[1] = 0
@@ -87,69 +87,85 @@ fullLevel =  0
 '#########################################################
 
 resetKicker()
-Motor.MoveSync("BC", 40, 15, 620, "True")
-
-While counter < 5 '3
+Motor.MoveSync("BC", 20, 20, 120, "True")
+Motor.Stop("BC","True")
+Program.Delay(200)
+Motor.MoveSync("BC",40,0,350,"True")
+readVal()
+While lightVal[0] <=110
+  readVal()
+  Motor.StartSync("BC",20,0)
+EndWhile
+While counter < 3 '3
   readVal()
   PD()
   If lightVal[1] <= 120 Then
     checkWhite()
   EndIf
 EndWhile
-' resetKicker()
-' collectionRight()
-' OpenKicker()
-' Motor.MoveSync("BC",20,20,80,"True")
-' resetKicker()
-' counter = 0
-' While counter < 2
-'   readVal()
-'   PD()
-'   If lightVal[1] <= 120 Then
-'     checkWhite()
-'   EndIf
-' EndWhile
-' resetKicker()
-' collectionLeft()
-OpenKicker()
-Motor.MoveSync("BC",100,100,100,"True")
+Motor.Stop("BC","True") 'Do not fucking remove
+Program.Delay(200)
 resetKicker()
-Motor.MoveSync("BC",-40,40,240,"True")
+collectionRight()
+OpenKicker()
+Motor.MoveSync("BC",20,20,100,"True")
+resetKicker()
 readVal()
-While lightVal[0] <= 125
+counter = 0
+While counter < 2
+  readVal()
+  PD()
+  If lightVal[1] <= 120 Then
+    checkWhite()
+  EndIf
+EndWhile
+Motor.Stop("BC","True") 'Do not fucking remove
+Program.Delay(200)
+resetKicker()
+Motor.Stop("BC","True") 'Do not fucking remove
+collectionLeft()
+Motor.Stop("BC","True")
+OpenKicker()
+Motor.Stop("BC","True")
+Motor.MoveSync("BC",40,40,100,"True")
+resetKicker()
+Motor.Stop("BC","True")
+Motor.MoveSync("BC",-40,40,240,"True")
+Motor.Stop("BC","True")
+readVal()
+While lightVal[0] <= 110
+  readVal()
   Motor.StartSync("BC",0,40)
 EndWhile
 Motor.Stop("BC","True")
-Program.Delay(200)
-Motor.MoveSync("BC",0,40,240,"True")
+Motor.MoveSync("BC",0,40,90,"True")
+Motor.Stop("BC","True")
+TP[0] = 70
 counter = 0
-While counter < 1
+While counter < 2
   readVal()
   PD()
   If lightVal[1] <= 120 Then
     checkWhite()
   EndIf
-EndWhile
-Motor.MoveSync("BC",0,40,60,"True")
-counter = 0
-While counter < 1
-  readVal()
-  PD()
-  If lightVal[1] <= 120 Then
-    checkWhite()
-  EndIf
-EndWhile
-returnLeft()
-readVal()
-While lightVal[1] <= 120
-  Motor.StartSync("BC",-20,-20)
 EndWhile
 Motor.Stop("BC","True")
-Motor.MoveSync("BC",-20,-20,20,"True")
+returnLeft()
+Motor.Stop("BC","True")
+Motor.MoveSync("BC",-20,-20,400,"True")
+readVal()
+While lightVal[1] <= 90
+  readVal()
+  Motor.StartSync("BC",-20,-20)
+  Speaker.Note(100,"B7",20)
+EndWhile
+Motor.Stop("BC","True")
+collectionLeft()
+Motor.Stop("BC","True")
 '#########################################################
 Sub OpenKicker
   Motor.Start("AD",100)
-  Program.Delay(50)
+  Program.Delay(70)
   Motor.Stop("AD","True") 
 EndSub
 
@@ -197,60 +213,73 @@ EndSub
 Sub collectionLeft
   'checkColor()
   Motor.Move("A", 50, 120, "True")
-  Motor.MoveSync("BC", 15, 15, 15, "True")
-  Motor.MoveSync("BC",0,-40,340,"True")
-  Motor.MoveSync("BC", 15, 15, 150, "True")
+  Motor.MoveSync("BC", 20, 20, 70, "True")
+  Motor.Stop("BC","True")
+  Motor.MoveSync("BC",0,-20,340,"True")
+  Motor.Stop("BC","True")
+  Motor.MoveSync("BC", 20, 20, 150, "True")
+  Motor.Stop("BC","True")
   Motor.Start("A", -30)
   Program.Delay(300)
   Motor.Stop("A", "True")
   Motor.Move("A", 50, 120, "True")
-  Motor.MoveSync("BC", 15, 15, 100, "True")
+  Motor.MoveSync("BC", 20, 20, 100, "True")
+  Motor.Stop("BC","True")
   Motor.Start("A", -30)
   Program.Delay(300)
   Motor.Stop("A", "True")
   Motor.MoveSync("BC",20,20,10,"True")
-  Motor.MoveSync("BC",-100,-100,200,"True")
-  Motor.MoveSync("BC",-20,20,140,"True")
+  Motor.Stop("BC","True")
+  Motor.MoveSync("BC",-20,-20,200,"True")
+  Motor.Stop("BC","True")
+  Motor.MoveSync("BC",-20,20,120,"True")
+  Motor.Stop("BC","True")
   fullLevel = fullLevel + 1
 EndSub
 
 Sub collectionRight
   'checkColor()
   Motor.Move("D", 50, 120, "True")
-  Motor.MoveSync("BC", 0, -40, 180, "True")
-  Motor.MoveSync("BC", 0, -30, 40, "True")
-  Motor.MoveSync("BC",15,15,120,"True")   
+  Motor.MoveSync("BC",20,20,40,"True")
+  Motor.MoveSync("BC", 0, -20, 235, "True")
+  Motor.Stop("BC","True")
+  Motor.MoveSync("BC",20,20,120,"True") 
+  Motor.Stop("BC","True")  
   Motor.Start("D", -30)
   Program.Delay(300)
   Motor.Stop("D", "True")
   Motor.Start("D",-30)
   Program.Delay(80)
-  Motor.MoveSync("BC",-20,-20,10,"True")
+  Motor.MoveSync("BC",-20,-20,40,"True")
+  Motor.Stop("BC","True")
   Motor.MoveSync("BC",-20,20,120,"True")
+  Motor.Stop("BC","True")
   fullLevel = fullLevel + 1
 EndSub
 
 Sub returnLeft
-  Motor.MoveSync("BC", 15, 15, 60, "True")
-  Motor.MoveSync("BC",0,-40,400,"True")
+  Motor.MoveSync("BC", 20, 20, 130, "True")
+  Motor.MoveSync("BC",20,-20,200,"True")
   Motor.Move("A", 50, 120, "True")
-  Motor.MoveSync("BC", 100, 100, 180, "True")
+  Motor.MoveSync("BC", 20, 20, 220, "True")
   Motor.Stop("BC","True")
-  Motor.MoveSync("BC", -100, -100, 180, "True")
+  Program.Delay(80)
+  Motor.MoveSync("BC", -20, -20, 220, "True")
   Motor.Stop("BC","True")
-  Motor.MoveSync("BC", -40, 40, 180, "True")
+  Motor.MoveSync("BC", -20, 20, 170, "True")
   resetKicker()
 EndSub
 
 Sub returnRight
-  Motor.MoveSync("BC", 15, 15, 80, "True")
-  Motor.MoveSync("BC",0,-40,360,"True")
+  Motor.MoveSync("BC", 20, 20, 130, "True")
+  Motor.MoveSync("BC",20,-20,200,"True")
   Motor.Move("D", 50, 120, "True")
-  Motor.MoveSync("BC", 100, 100, 180, "True")
+  Motor.MoveSync("BC", 20, 20, 180, "True")
   Motor.Stop("BC","True")
-  Motor.MoveSync("BC", -100, -100, 180, "True")
+  Program.Delay(80)
+  Motor.MoveSync("BC", -20, -20, 180, "True")
   Motor.Stop("BC","True")
-  Motor.MoveSync("BC", -40, 40, 180, "True")
+  Motor.MoveSync("BC", -20, 20, 170, "True")
   resetKicker()
 EndSub
 
