@@ -16,7 +16,7 @@
 Motor.Invert("A")
 Motor.Invert("B")
 
-TotalRGBTH[0] = 705 'TH Value of Sensor 2
+TotalRGBTH[0] = 518 'TH Value of Sensor 2
 TotalRGBTH[1] = 545 'TH Value of Sensor 3
 TotalRGBGGTH[1] = 306
 lightVal[0] = 0
@@ -28,14 +28,13 @@ Error[0] = 0
 Last_Error[1] = 0
 Error[1] = 0
 
-TP[0] = 100 '100
+TP[0] = 80 '100
 
 Kp[0] = 0.08 '0.08
-Ki[0] = 0.0008 '0.005
-Kd[0] = 0.8 '0.4
+Ki[0] = 0.0008 '0.0008
+Kd[0] = 0.8 '0.8
 
 Intergal[0] = 0
-Intergal[1] = 0
 
 'colours of car in carpark
 'Blue = 2, Green = 3, Yellow = 4, Red = 5
@@ -80,6 +79,9 @@ Sensor.SetMode(2, 4)
 Sensor.SetMode(3, 4)
 Sensor.SetMode(4, 2)
 
+motorEncoder = 0
+motorEncoder_Speed = 0
+motorEncoder_Degree = 0
 counter = 0
 turncounter = 0
 fullLevel =  0
@@ -87,9 +89,10 @@ B_Degree = 0
 C_Degree = 0
 
 '#########################################################
-
 resetKicker()
-Motor.MoveSync("BC", 20, 20, 120, "True")
+motorEncoder_Degree = 120
+motorEncoder_Speed = 20
+motorEncoder()
 Motor.Stop("BC","True")
 Program.Delay(200)
 Motor.MoveSync("BC",40,0,350,"True")
@@ -124,8 +127,6 @@ EndWhile
 Motor.Stop("BC","True") 'Do not fucking remove
 resetKicker()
 Motor.Stop("BC","True") 'Do not fucking remove
-resetKicker()
-Motor.Stop("BC","True") 'Do not fucking remove
 collectionLeft()
 Motor.Stop("BC","True")
 OpenKicker()
@@ -141,9 +142,9 @@ While lightVal[0] <= 110
   Motor.StartSync("BC",0,40)
 EndWhile
 Motor.Stop("BC","True")
-Motor.MoveSync("BC",0,40,80,"True")
+Motor.MoveSync("BC",0,40,100,"True")
 Motor.Stop("BC","True")
-TP[0] = 60
+TP[0] = 65
 counter = 0
 While counter < 2
   readVal()
@@ -153,13 +154,21 @@ While counter < 2
   EndIf
 EndWhile
 Motor.Stop("BC","True")
-' returnLeft()
-' Motor.Stop("BC","True")
-
-' Motor.Stop("BC","True")
-' collectionLeft()
-' Motor.Stop("BC","True")
-' ' Havent do the collect the other part
+returnLeft()
+Motor.Stop("BC","True")
+resetKicker()
+Motor.MoveSync("BC",0,20,400,"True")
+Motor.Stop("BC","True")
+readVal()
+While lightVal[0] >= 518
+  readVal()
+  Motor.StartSync("BC",0,20)
+EndWhile
+Motor.Stop("BC","True")
+Motor.MoveSync("BC",0,20,40,"True")
+' motorEncoder_Degree = 40
+' motorEncoder_Speed = 100
+' motorEncoder()
 ' TP[0] = 100
 ' counter = 0
 ' While counter < 3
@@ -199,7 +208,7 @@ EndSub
 
 Sub resetKicker
   Motor.Start("AD",-100)
-  Program.Delay(350)
+  Program.Delay(400)
   Motor.Stop("AD","True") 
 EndSub
 
@@ -221,7 +230,19 @@ EndSub
 Sub checkWhite
   Speaker.Note(100,"B7",20)
   Program.Delay(10)
-  Motor.MoveSync("BC",100,100,20,"True")
+  motorEncoder_Degree = 20
+  motorEncoder_Speed = 100
+  motorEncoder()
+  Program.Delay(10)
+  counter = counter + 1
+EndSub
+
+Sub checkWhitetwo
+  Speaker.Note(100,"B7",20)
+  Program.Delay(10)
+  motorEncoder_Degree = 20
+  motorEncoder_Speed = 100
+  motorEncoder()
   Program.Delay(10)
   counter = counter + 1
 EndSub
@@ -251,14 +272,14 @@ Sub collectionLeft
   Program.Delay(300)
   Motor.Stop("A", "True")
   Motor.Move("A", 50, 120, "True")
-  Motor.MoveSync("BC", 20, 20, 100, "True")
+  Motor.MoveSync("BC", 20, 20, 80, "True")
   Motor.Stop("BC","True")
   Motor.Start("A", -30)
   Program.Delay(300)
   Motor.Stop("A", "True")
   Motor.MoveSync("BC",20,20,10,"True")
   Motor.Stop("BC","True")
-  Motor.MoveSync("BC",-20,-20,200,"True")
+  Motor.MoveSync("BC",-20,-20,180,"True")
   Motor.Stop("BC","True")
   Motor.MoveSync("BC",-20,20,130,"True")
   Motor.Stop("BC","True")
@@ -267,48 +288,62 @@ EndSub
 
 Sub collectionRight
   'checkColor()
+  Motor.Move("D", 50, 120, "True")
   Motor.ResetCount("BC")
-  While B_Degree <= 250
+  While B_Degree <= 230
     readVal()
     PD()
     B_Degree = Motor.GetCount("B")
   EndWhile
   Motor.Stop("BC","True")
-  Motor.Move("D", 50, 120, "True")
-  Motor.MoveSync("BC",0,-20,380,"True")
+  Program.Delay(100)
+  Motor.MoveSync("BC",0,-20,390,"True")
   Motor.Stop("BC","True")
   Program.Delay(100)
-  Motor.MoveSync("BC",20,20,120,"True")
-  Motor.Stop("BC","True")
-  OpenKicker()
-  Motor.MoveSync("BC",20,20,80,"True")
+  motorEncoder_Degree = 120
+  motorEncoder_Speed = 20
+  motorEncoder()
   Motor.Stop("BC","True")
   resetKicker()
-  Motor.MoveSync("BC",-20,-20,180,"True")
+  OpenKicker()
+  motorEncoder_Degree = 100
+  motorEncoder_Speed = 15
+  motorEncoder()
   Motor.Stop("BC","True")
+  resetKicker()
+  motorEncoder_Degree = 180
+  motorEncoder_Speed = -20
+  motorEncoder()
+  Motor.Stop("BC","True")
+  Program.Delay(100)
+  readVal()
   While lightVal[0] >= 100
     readVal()
     Motor.StartSync("BC",-20,20)
   EndWhile
   Motor.Stop("BC","True")
+  Program.Delay(100)
+  Motor.MoveSync("BC",0,20,40,"True")
+  Motor.Stop("BC","True")
+  Program.Delay(100)
 EndSub
 
 Sub returnLeft
-  Motor.MoveSync("BC", 20, 20, 130, "True")
+  motorEncoder_Degree = 80
+  motorEncoder_Speed = 20
+  motorEncoder()
+  Motor.Stop("BC","True")
   Motor.MoveSync("BC",20,-20,200,"True")
   Motor.Move("A", 50, 120, "True")
-  Motor.MoveSync("BC", 20, 20, 140, "True")
+  motorEncoder_Degree = 100
+  motorEncoder_Speed = 20
+  motorEncoder()
   Motor.Stop("BC","True")
   Program.Delay(80)
-  Motor.MoveSync("BC", -20, -20, 140, "True")
+  motorEncoder_Degree = 220
+  motorEncoder_Speed = -20
+  motorEncoder()
   Motor.Stop("BC","True")
-  readVal()
-  While lightVal[0] >= 505
-    readVal()
-    Motor.StartSync("BC",-20,20)
-  EndWhile
-  Motor.Stop("BC","True")
-  Program.Delay(200)
   resetKicker()
 EndSub
 
@@ -321,14 +356,14 @@ Sub returnRight
   Program.Delay(80)
   Motor.MoveSync("BC", -20, -20, 140, "True")
   Motor.Stop("BC","True")
-  readVal()
-  While lightVal[0] >= 505
-    readVal()
-    Motor.StartSync("BC",-20,20)
-  EndWhile
-  Motor.Stop("BC","True")
-  Program.Delay(200)
   resetKicker()
 EndSub
 
+Sub motorEncoder
+  Motor.ResetCount("BC")
+  B_Degree = Motor.GetCount("B") 
+  C_Degree = Motor.GetCount("C")
+  motorEncoder = (B_Degree - C_Degree)*0.5
+  Motor.MoveSteer("BC",motorEncoder_Speed,motorEncoder,motorEncoder_Degree,"True")
+EndSub
 '6/9/2021

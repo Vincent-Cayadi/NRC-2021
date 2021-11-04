@@ -1,0 +1,16 @@
+Motor.Invert("B")
+
+B_Degree = 0
+C_Degree = 0
+
+Correction = 0
+
+Motor.ResetCount("BC")
+
+B_Degree = Motor.GetCount("B") 
+C_Degree = Motor.GetCount("C")
+
+While "True"
+    Correction = (B_Degree - C_Degree)*0.5
+    Motor.StartSteer("BC",40,Correction)
+EndWhile
