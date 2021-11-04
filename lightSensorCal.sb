@@ -1,9 +1,6 @@
-Sensor.SetMode(2,4)
+Motor.Invert("A")
+Sub resetKicker
+  Motor.MoveSync("AD",100,100,100,"True")
+EndSub
 
-While "True"  
-  rawValue = Sensor.ReadRaw(2,3)
-  lightVal = rawValue[0] + rawValue[1] + rawValue[2]
-  TextWindow.WriteLine(lightVal)
-EndWhile
-
-  
+resetKicker()

@@ -7,10 +7,9 @@ Correction = 0
 
 Motor.ResetCount("BC")
 
-B_Degree = Motor.GetCount("B") 
-C_Degree = Motor.GetCount("C")
-
 While "True"
+    B_Degree = Motor.GetCount("B") 
+    C_Degree = Motor.GetCount("C")
     Correction = (B_Degree - C_Degree)*0.5
-    Motor.StartSteer("BC",40,Correction)
+    Motor.StartSync("BC",30 - Correction,30 + Correction)
 EndWhile
