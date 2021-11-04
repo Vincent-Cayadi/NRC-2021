@@ -181,43 +181,7 @@ While lightVal[0] <= 120
 EndWhile
 Motor.Stop("BC","True")
 Program.Delay(200)
-TP[0] = 80
-counter = 0
-While counter < 3
-  readVal()
-  PD()
-  If lightVal[1] <= 120 Then
-    checkWhite()
-  EndIf
-EndWhile
-Motor.ResetCount("BC")  
-motorEncoder_Degree = 120
-motorEncoder_Speed = -20
-motorEncoder()
-Motor.Stop("BC","True")
-Motor.Stop("BC","True")
-Program.Delay(200)
-Motor.MoveSync("BC",40,0,380,"True")
-Motor.Stop("BC","True")
-Program.Delay(200)
-Motor.ResetCount("BC")
-motorEncoder_Degree = 120
-motorEncoder_Speed = 20
-motorEncoder()
-OpenKicker()
-Motor.Stop("BC","True")
-Program.Delay(200)
-Motor.MoveSync("BC",0,40,380,"True")
-Motor.Stop("BC","True")
-Program.Delay(200)
-Motor.Start("BC",20)
-Program.Delay(400)
-Motor.Stop("BC","True")
-readVal()
-While lightVal[0] >= 120
-  readVal()
-  Motor.StartSync("BC",-20,-20)
-EndWhile
+depositing()
 '#########################################################
 Sub OpenKicker
   Motor.Start("AD",100)
@@ -396,5 +360,46 @@ Sub motorEncoder
   C_Degree = Motor.GetCount("C")
   motorEncoder = (B_Degree - C_Degree)*0.5
   Motor.MoveSync("BC",motorEncoder_Speed - motorEncoder,motorEncoder_Speed + motorEncoder, motorEncoder_Degree,"True")
+EndSub
+
+Sub depositing
+  TP[0] = 80
+  counter = 0
+  While counter < 3
+    readVal()
+    PD()
+    If lightVal[1] <= 120 Then
+      checkWhite()
+    EndIf
+  EndWhile
+  Motor.ResetCount("BC")  
+  motorEncoder_Degree = 120
+  motorEncoder_Speed = -20
+  motorEncoder()
+  Motor.Stop("BC","True")
+  Motor.Stop("BC","True")
+  Program.Delay(200)
+  Motor.MoveSync("BC",40,0,380,"True")
+  Motor.Stop("BC","True")
+  Program.Delay(200)
+  Motor.ResetCount("BC")
+  motorEncoder_Degree = 120
+  motorEncoder_Speed = 20
+  motorEncoder()
+  OpenKicker()
+  Motor.Stop("BC","True")
+  Program.Delay(200)
+  Motor.MoveSync("BC",0,40,380,"True")
+  Motor.Stop("BC","True")
+  Program.Delay(200)
+  Motor.Start("BC",20)
+  Program.Delay(400)
+  Motor.Stop("BC","True")
+  Program.Delay(200)
+  readVal()
+  While lightVal[0] >= 120
+    readVal()
+    Motor.StartSync("BC",-20,-20)
+  EndWhile
 EndSub
 '6/9/2021
