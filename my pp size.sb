@@ -115,6 +115,7 @@ resetKicker()
 collectionRight()
 reset()
 OpenKicker()
+TP[0] = 70
 counter = 0
 While counter < 2
   readVal()
@@ -137,9 +138,8 @@ motorEncoder()
 Motor.Stop("BC","True")
 resetKicker()
 Motor.Stop("BC","True")
-Motor.MoveSync("BC",-40,40,240,"True")
+Motor.MoveSync("BC",-40,40,260,"True")
 Motor.Stop("BC","True")
-Motor.MoveSync("BC",0,40,40,"True")
 readVal()
 While lightVal[0] <= 100
   readVal()
@@ -148,7 +148,7 @@ EndWhile
 reset()
 Motor.MoveSync("BC",0,40,80,"True")
 Motor.Stop("BC","True")
-TP[0] = 65
+TP[0] = 60
 counter = 0
 While counter < 2
   readVal()
@@ -230,23 +230,23 @@ EndSub
 Sub collectionLeft
   'checkColor()
   Motor.Move("A", 50, 120, "True")
-  TP[0] = 70
+  TP[0] = 60
   Motor.ResetCount("BC")
-  While B_Degree <= 170
+  While B_Degree <= 150
     readVal()
     PD()
     B_Degree = Motor.GetCount("B")
   EndWhile
   reset()
   Motor.Stop("BC","True")
-  Motor.MoveSync("BC",20,-20,200,"True")
+  Motor.MoveSync("BC",0,-20,390,"True")
   Motor.Stop("BC","True")
   Motor.ResetCount("BC")
   motorEncoder_Degree = 150
   motorEncoder_Speed = 20
   motorEncoder()
   Motor.Stop("BC","True")
-  Motor.Start("A", -30)
+  Motor.Start("A", -20)
   Program.Delay(300)
   Motor.Stop("A", "True")
   Motor.Move("A", 50, 120, "True")
@@ -277,7 +277,7 @@ Sub collectionRight
   'checkColor()
   Motor.Move("D", 50, 120, "True")
   Program.Delay(200)
-  TP[0] = 70
+  TP[0] = 60
   Motor.ResetCount("BC")
   While B_Degree <= 240
     readVal()
@@ -313,7 +313,7 @@ Sub collectionRight
     Motor.StartSync("BC",-20,20)
   EndWhile
   reset()
-  Motor.MoveSync("BC",-20,20,30,"True")
+  Motor.MoveSync("BC",-20,20,20,"True")
   reset()
 EndSub
 
@@ -373,7 +373,7 @@ Sub depositing
   motorEncoder_Speed = -20
   motorEncoder()
   reset()
-  Motor.MoveSync("BC",40,0,380,"True")
+  Motor.MoveSync("BC",40,0,360,"True")
   reset()
   TP[0] = 80
   Motor.ResetCount("BC")
@@ -383,7 +383,7 @@ Sub depositing
     B_Degree = Motor.GetCount("B")
   EndWhile
   reset()
-  Motor.MoveSync("BC",0,40,380,"True")
+  Motor.MoveSync("BC",0,40,360,"True")
   reset()
   OpenKicker()
   Motor.Start("BC",40)
