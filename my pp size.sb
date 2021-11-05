@@ -176,6 +176,23 @@ While lightVal[0] <= 120
 EndWhile
 reset()
 depositing()
+reset()
+Motor.MoveSync("BC",-20,-20,40,"True")
+reset()
+lineSquare()
+reset()
+Motor.MoveSync("BC",0,40,360,"True")
+reset()
+TP[0] = 60
+counter = 0
+While counter < 1
+  readVal()
+  PD()
+  If lightVal[0] <= 120 Then
+    checkWhite()
+  EndIf
+EndWhile
+reset()
 '#########################################################
 Sub OpenKicker
   Motor.Start("AD",100)
@@ -313,8 +330,6 @@ Sub collectionRight
     Motor.StartSync("BC",-20,20)
   EndWhile
   reset()
-  Motor.MoveSync("BC",-20,20,20,"True")
-  reset()
 EndSub
 
 Sub returnLeft
@@ -383,7 +398,7 @@ Sub depositing
     B_Degree = Motor.GetCount("B")
   EndWhile
   reset()
-  Motor.MoveSync("BC",0,40,360,"True")
+  Motor.MoveSync("BC",0,40,340,"True")
   reset()
   OpenKicker()
   Motor.Start("BC",40)
@@ -400,5 +415,23 @@ EndSub
 Sub reset
   Motor.Stop("BC","True")
   Program.Delay(100)
+EndSub
+
+Sub lineSquare
+  readVal()
+  While lightVal[0] >= 251 Or lightVal[1] >= 285
+      readVal( )
+      If lightVal[0] >= 251 Then
+          Motor.Start("B",-20)
+      Else    
+          Motor.Stop("B","True")
+      EndIf
+      If lightVal[1] >= 285 Then
+          Motor.Start("C",-20)
+      Else    
+          Motor.Stop("C","True")
+      EndIf
+  EndWhile
+  Motor.Stop("BC","True")
 EndSub
 '6/9/2021

@@ -5,17 +5,20 @@ lightVal[0] = 0
 lightVal[1] = 0
 
 readVal()
-While lightVal[0] <= 120
-    readVal()
-    Motor.StartSync("BC",20,0)
+While lightVal[0] >= 251 Or lightVal[1] >= 285
+    readVal( )
+    If lightVal[0] >= 251 Then
+        Motor.Start("B",-20)
+    Else    
+        Motor.Stop("B","True")
+    EndIf
+    If lightVal[1] >= 285 Then
+        Motor.Start("C",-20)
+    Else    
+        Motor.Stop("C","True")
+    EndIf
 EndWhile
-readVal()
-While lightVal[1] <= 120
-    readVal()
-    Motor.StartSync("BC",20,0)
-EndWhile
-
-
+Motor.Stop("BC","True")
 
 Sub readVal
   rawValue = Sensor.ReadRaw(2,3)
