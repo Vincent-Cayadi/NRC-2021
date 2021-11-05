@@ -1,0 +1,25 @@
+Motor.Invert("B")
+Sensor.SetMode(2, 4)
+Sensor.SetMode(3, 4)
+lightVal[0] = 0
+lightVal[1] = 0
+
+readVal()
+While lightVal[0] <= 120
+    readVal()
+    Motor.StartSync("BC",20,0)
+EndWhile
+readVal()
+While lightVal[1] <= 120
+    readVal()
+    Motor.StartSync("BC",20,0)
+EndWhile
+
+
+
+Sub readVal
+  rawValue = Sensor.ReadRaw(2,3)
+  rawValuei = Sensor.ReadRaw(3,3)
+  lightVal[0] = rawValue[0] + rawValue[1] + rawValue[2]
+  lightVal[1] = rawValuei[0] + rawValuei[1] + rawValuei[2]
+EndSub
