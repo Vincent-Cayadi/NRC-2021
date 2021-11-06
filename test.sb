@@ -1,8 +1,397 @@
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'                                                                                                      '
+'                                                                                                      '
+'                                                                                                      '
+'                                                                                                      '
+'                                                                                                      '
+'                                                                                                      '
+'Attention who ever is reading this shit. This programme is to be run with robot that has FULL Battery '
+'                                                                                                      '
+'                                                                                                      '
+'                                                                                                      '
+'                                                                                                      '
+'                                                                                                      '
+'                                                                                                      '
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+Motor.Invert("A")
 Motor.Invert("B")
-Sensor.SetMode(4,2)
-carValue = 0
 
-While rawValue <> 5
-  rawValue=Sensor.ReadRaw(4,1)  
-  Motor.StartPower("BC",100)
-EndWhile
+TotalRGBTH[0] = 518 'TH Value of Sensor 2
+TotalRGBTH[1] = 545 'TH Value of Sensor 3
+TotalRGBGGTH[1] = 306
+lightVal[0] = 0
+lightVal[1] = 0
+
+Last_Error[0] = 0
+Error[0] = 0
+
+Last_Error[1] = 0
+Error[1] = 0
+
+TP[0] = 80 '100
+
+Kp[0] = 0.07 '0.08
+Ki[0] = 0.0007 '0.0008
+Kd[0] = 0.7 '0.8
+
+Intergal[0] = 0
+
+'colours of car in carpark
+'Blue = 2, Green = 3, Yellow = 4, Red = 5
+carpark[0] = 0
+carpark[1] = 0
+carpark[2] = 0
+carpark[3] = 0
+carpark[4] = 0
+carpark[5] = 0
+carpark[6] = 0
+carpark[7] = 0
+carpark[8] = 0
+carpark[9] = 0
+carpark[10] = 0
+carpark[11] = 0
+
+'Fixed colours of all carparks
+'Blue = 2, Green = 3, Yellow = 4, Red = 5
+parkState[0] = 2
+parkState[1] = 2
+parkState[2] = 5
+parkState[3] = 3
+parkState[4] = 3
+parkState[5] = 5
+parkState[6] = 3
+parkState[7] = 2
+parkState[8] = 5
+parkState[9] = 5
+parkState[10] = 3
+parkState[11] = 2
+
+'colours of waiting cars
+waitingCar[0] = 0
+waitingCar[1] = 0
+waitingCar[2] = 0
+waitingCar[3] = 0
+waitingCar[4] = 0
+waitingCar[5] = 0
+
+Sensor.SetMode(1, 2)
+Sensor.SetMode(2, 4)
+Sensor.SetMode(3, 4)
+Sensor.SetMode(4, 2)
+
+motorEncoder = 0
+motorEncoder_Speed = 0
+motorEncoder_Degree = 0
+lineSquare_TH[0] = 251
+lineSquare_TH[1] = 285 
+counter = 0
+turncounter = 0
+fullLevel =  0
+B_Degree = 0
+C_Degree = 0
+
+'#########################################################
+depositing()
+reset()
+' #########################################################
+Sub OpenKicker
+  Motor.Start("AD",100)
+  Program.Delay(120)
+  Motor.Stop("AD","True") 
+EndSub
+
+Sub fullOpen
+  Motor.Start("AD",100)
+  Program.Delay(240)
+  Motor.Stop("AD","True") 
+EndSub
+
+Sub slowClosure
+  Motor.Start("AD",-40)
+  Program.Delay(800)
+  Motor.Stop("AD","True") 
+EndSub
+
+Sub resetKicker
+  Motor.Start("AD",-100)
+  Program.Delay(400)
+  Motor.Stop("AD","True") 
+EndSub
+
+Sub readVal
+  rawValue = Sensor.ReadRaw(2,3)
+  rawValuei = Sensor.ReadRaw(3,3)
+  lightVal[0] = rawValue[0] + rawValue[1] + rawValue[2]
+  lightVal[1] = rawValuei[0] + rawValuei[1] + rawValuei[2]
+EndSub
+
+Sub PD
+  Error[0] = lightVal[0] - TotalRGBTH[0]
+  Intergal[0] = Error[0] + Intergal[0]*0.5
+  Correction = (Error[0] * Kp[0]) + (Error[0] - Last_Error[0])*Kd[0] + Intergal[0]*Ki[0]
+  Motor.StartSync("BC",Math.Max(Math.Min((TP[0] + Correction),100),-100),Math.Max(Math.Min((TP[0] - Correction),100),-100))
+  Last_Error = Error
+EndSub
+
+Sub PDtwo
+  Error[0] = lightVal[0] - TotalRGBTH[0]
+  Intergal[0] = Error[0] + Intergal[0]*0.5
+  Correction = (Error[0] * Kp[0]) + (Error[0] - Last_Error[0])*Kd[0] + Intergal[0]*Ki[0]
+  Motor.StartSync("BC",Math.Max(Math.Min((TP[0] - Correction),100),-100),Math.Max(Math.Min((TP[0] + Correction),100),-100))
+  Last_Error = Error
+EndSub
+
+Sub checkWhite
+  Speaker.Note(100,"B7",20)
+  Program.Delay(10)
+  Motor.ResetCount("BC")
+  Motor.MoveSync("BC",100,100,20,"True")
+  Program.Delay(10)
+  counter = counter + 1
+EndSub
+
+Sub collectionLeft
+  'checkColor()
+  Motor.Move("A", 50, 120, "True")
+  TP[0] = 60
+  Motor.ResetCount("BC")
+  While B_Degree <= 150
+    readVal()
+    PD()
+    B_Degree = Motor.GetCount("B")
+  EndWhile
+  reset()
+  Motor.Stop("BC","True")
+  Motor.MoveSync("BC",0,-20,390,"True")
+  Motor.Stop("BC","True")
+  Motor.ResetCount("BC")
+  motorEncoder_Degree = 150
+  motorEncoder_Speed = 20
+  motorEncoder()
+  Motor.Stop("BC","True")
+  Motor.Start("A", -20)
+  Program.Delay(300)
+  Motor.Stop("A", "True")
+  Motor.Move("A", 50, 120, "True")
+  Motor.ResetCount("BC")
+  motorEncoder_Degree = 80
+  motorEncoder_Speed = 20
+  motorEncoder()
+  Motor.Stop("BC","True")
+  Motor.Start("A", -30)
+  Program.Delay(300)
+  Motor.Stop("A", "True")
+  Motor.ResetCount("BC")
+  motorEncoder_Degree = 10
+  motorEncoder_Speed = 20
+  motorEncoder()
+  Motor.Stop("BC","True")
+  Motor.ResetCount("BC")
+  motorEncoder_Degree = 180
+  motorEncoder_Speed = -20
+  motorEncoder()
+  Motor.Stop("BC","True")
+  Motor.MoveSync("BC",-20,20,160,"True")
+  Motor.Stop("BC","True")
+  fullLevel = fullLevel + 1
+EndSub
+
+Sub collectionRight
+  'checkColor()
+  Motor.Move("D", 50, 120, "True")
+  Program.Delay(200)
+  TP[0] = 60
+  Motor.ResetCount("BC")
+  While B_Degree <= 240
+    readVal()
+    PD()
+    B_Degree = Motor.GetCount("B")
+  EndWhile
+  reset()
+  TP[0] = 100
+  Motor.MoveSync("BC",0,-20,390,"True")
+  Motor.Stop("BC","True")
+  Program.Delay(100)
+  Motor.ResetCount("BC")
+  motorEncoder_Degree = 120
+  motorEncoder_Speed = 20
+  motorEncoder()
+  Motor.Stop("BC","True")
+  resetKicker()
+  OpenKicker()
+  Motor.ResetCount("BC")
+  motorEncoder_Degree = 100
+  motorEncoder_Speed = 15
+  motorEncoder()
+  Motor.Stop("BC","True")
+  resetKicker()
+  Motor.ResetCount("BC")
+  motorEncoder_Degree = 160
+  motorEncoder_Speed = -20
+  motorEncoder()
+  reset()
+  readVal()
+  While lightVal[0] >= 120
+    readVal()
+    Motor.StartSync("BC",-20,20)
+  EndWhile
+  reset()
+EndSub
+
+Sub returnLeft
+  Motor.ResetCount("BC")
+  motorEncoder_Degree = 80
+  motorEncoder_Speed = 20
+  motorEncoder()
+  Motor.Stop("BC","True")
+  Motor.MoveSync("BC",40,-40,200,"True")
+  Motor.Move("A", 50, 120, "True")
+  Motor.ResetCount("BC")
+  motorEncoder_Degree = 100
+  motorEncoder_Speed = 20
+  motorEncoder()
+  Motor.Stop("BC","True")
+  Program.Delay(80)
+  Motor.ResetCount("BC")
+  motorEncoder_Degree = 220
+  motorEncoder_Speed = -20
+  motorEncoder()
+  Motor.Stop("BC","True")
+  resetKicker()
+EndSub
+
+Sub returnRight
+  Motor.MoveSync("BC", 20, 20, 130, "True")
+  Motor.MoveSync("BC",20,-20,200,"True")
+  Motor.Move("D", 50, 120, "True")
+  Motor.MoveSync("BC", 20, 20, 140, "True")
+  Motor.Stop("BC","True")
+  Program.Delay(80)
+  Motor.MoveSync("BC", -20, -20, 140, "True")
+  Motor.Stop("BC","True")
+  resetKicker()
+EndSub
+
+Sub motorEncoder
+  B_Degree = Motor.GetCount("B") 
+  C_Degree = Motor.GetCount("C")
+  motorEncoder = (B_Degree - C_Degree)*0.5
+  Motor.MoveSync("BC",motorEncoder_Speed - motorEncoder,motorEncoder_Speed + motorEncoder, motorEncoder_Degree,"True")
+EndSub
+
+Sub depositing
+  ' TP[0] = 80
+  ' counter = 0
+  ' While counter < 2
+  '   readVal()
+  '   PD()
+  '   If lightVal[1] <= 120 Then
+  '     checkWhite()
+  '   EndIf
+  ' EndWhile
+  ' reset()
+  ' Motor.MoveSync("BC",0,40,30"True")
+  ' reset()
+  ' readVal()
+  ' While lightVal[0] >= 592
+  '   readVal()
+  '   Motor.StartSync("BC",0,40)
+  ' EndWhile
+  ' reset()
+  ' Speaker.Note(100,"C7",40)
+  ' TP[0] = 50
+  ' TotalRGBGGTH[0] = 592
+  ' Motor.ResetCount("BC")
+  ' While B_Degree <= 320 
+  '   readVal()
+  '   PD()
+  '   B_Degree = Motor.GetCount("B")
+  ' EndWhile
+  ' TotalRGBTH[0] = 518
+  ' reset()
+  ' Speaker.Note(100,"C7",40)
+  ' Motor.ResetCount("BC")  
+  ' motorEncoder_Degree = 340
+  ' motorEncoder_Speed = 20
+  ' motorEncoder()
+  ' reset()
+  ' Motor.MoveSync("BC",20,0,120,"True")
+  ' reset()
+  ' readVal()
+  ' While lightVal[0] >= 120
+  '   readVal()
+  '   Motor.StartSync("BC",20,0)
+  ' EndWhile
+  ' reset()
+  ' TP[0] = 60
+  ' Motor.ResetCount("BC")
+  ' readVal()
+  ' While B_Degree <= 100
+  '   readVal()
+  '   PD()
+  '   B_Degree = Motor.GetCount("B")
+  ' EndWhile
+  ' reset()
+  ' Motor.MoveSync("BC",0,40,360,"True")
+  ' reset()
+  ' OpenKicker()
+  ' Motor.Start("BC",40)
+  ' Program.Delay(200)
+  ' Motor.Stop("BC","True")
+  ' reset()
+  ' readVal()
+  ' While lightVal[0] >= 120
+  '   readVal()
+  '   Motor.StartSync("BC",-20,-20)
+  ' EndWhile
+  TP[0] = 80
+  counter = 0
+  While counter < 3
+    readVal()
+    PD()
+    If lightVal[1] <= 120 Then
+      checkWhite()
+    EndIf
+  EndWhile
+  reset()
+  Motor.ResetCount("BC")  
+  motorEncoder_Degree = 110
+  motorEncoder_Speed = -20
+  motorEncoder()
+  reset()
+  Motor.MoveSync("BC",40,0,320,"True")
+  reset()
+  readVal()
+  While lightVal[0] >= 120 
+    readVal()
+    Motor.StartSync("BC",40,0)
+  EndWhile
+  reset()
+  TP[0] = 80
+  Motor.ResetCount("BC")
+  While B_Degree <= 100
+    readVal()
+    PD()
+    B_Degree = Motor.GetCount("B")
+  EndWhile
+  reset()
+  Motor.MoveSync("BC",0,40,340,"True")
+  reset()
+  OpenKicker()
+  Motor.Start("BC",40)
+  Program.Delay(400)
+  Motor.Stop("BC","True")
+  reset()
+  readVal()
+  While lightVal[0] >= 120
+    readVal()
+    Motor.StartSync("BC",-20,-20)
+  EndWhile
+EndSub
+
+Sub reset
+  Motor.Stop("BC","True")
+  Motor.ResetCount("BC")
+  Program.Delay(150)
+EndSub
+'6/9/2021
