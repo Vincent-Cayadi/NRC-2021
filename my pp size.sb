@@ -105,143 +105,129 @@ While lightVal[0] <= 110
   readVal()
   Motor.StartSync("BC",25,-25)
 EndWhile
-While counter < 3 '3
-  readVal()
-  PD()
-  If lightVal[1] <= 120 Then
-    checkWhite()
-  EndIf
-EndWhile
-reset() 'Do not fucking remove
-TP[0] = 50
-resetKicker()
-collectionRight()
-reset()
-OpenKicker()
-TP[0] = 70
-counter = 0
-While counter < 2
-  readVal()
-  PD()
-  If lightVal[1] <= 120 Then
-    checkWhite()
-  EndIf
-EndWhile
-reset() 'Do not fucking remove
-resetKicker()
-Motor.Stop("BC","True") 'Do not fucking remove
-collectionLeft()
-Motor.Stop("BC","True")
-OpenKicker()
-Motor.Stop("BC","True")
-Motor.ResetCount("BC")  
-motorEncoder_Degree = 20
-motorEncoder_Speed = 40
-motorEncoder()
-Motor.Stop("BC","True")
-resetKicker()
-Motor.Stop("BC","True")
-Motor.MoveSync("BC",-40,40,260,"True")
-Motor.Stop("BC","True")
-readVal()
-While lightVal[0] <= 100
-  readVal()
-  Motor.StartSync("BC",0,40)
-EndWhile
-reset()
-Motor.MoveSync("BC",0,40,80,"True")
-Motor.Stop("BC","True")
-TP[0] = 60
-counter = 0
-While counter < 2
-  readVal()
-  PD()
-  If lightVal[1] <= 120 Then
-    checkWhite()
-  EndIf
-EndWhile
-reset()
-returnLeft()
-Motor.Stop("BC","True")
-resetKicker()
-Motor.MoveSync("BC",0,40,180,"True")
-Motor.Stop("BC","True")
-readVal()
-While lightVal[0] >= 120
-  readVal()
-  Motor.StartSync("BC",0,40)
-EndWhile
-reset()
-readVal()
-While lightVal[0] <= 120
-  readVal()
-  Motor.StartSync("BC",0,40)
-EndWhile
-reset()
-depositing()
-reset()
-Motor.MoveSync("BC",0,25,200,"True")
-readVal()
-While lightVal[1] >= 100
-  readVal()
-  Motor.StartSync("BC",0,25)
-EndWhile
-reset()
-Motor.MoveSync("BC",0,25,40,"True")
-reset()
-Motor.ResetCount("BC")
-motorEncoder_Degree = 260
-motorEncoder_Speed = 25
-motorEncoder()
-Motor.Stop("BC","True")
-reset()
-TP[0] = 40
-Motor.ResetCount("BC")
-While B_Degree <= 300
-  readVal()
-  PDtwo()
-  B_Degree = Motor.GetCount("B")
-EndWhile
-reset()
-slowClosure()
-Motor.ResetCount("BC")
-motorEncoder_Degree = 80
-motorEncoder_Speed = -25
-motorEncoder()
-Motor.Stop("BC","True")
-reset()
-OpenKicker()
-Motor.ResetCount("BC")
-motorEncoder_Degree = 60
-motorEncoder_Speed = 10
-motorEncoder()
-Motor.Stop("BC","True")
-resetKicker()
-reset()
 
-readVal()
-While lightVal[1] >= 120 
-  readVal()
-  Motor.StartSync("BC",-25,-25)
-EndWhile
-reset()
+collectRedCar()
 
-Motor.ResetCount("BC")
-motorEncoder_Degree = 40
-motorEncoder_Speed = -25
-motorEncoder()
-Motor.Stop("BC","True")
-reset()
+' While counter < 3 '3
+'   readVal()
+'   PD()
+'   If lightVal[1] <= 120 Then
+'     checkWhite()
+'   EndIf
+' EndWhile
+' reset() 'Do not fucking remove
+' TP[0] = 50
+' resetKicker()
+' collectionRight()
+' reset()
+' OpenKicker()
+' TP[0] = 70
+' counter = 0
+' While counter < 2
+'   readVal()
+'   PD()
+'   If lightVal[1] <= 120 Then
+'     checkWhite()
+'   EndIf
+' EndWhile
+' reset() 'Do not fucking remove
 
-lineSquare()
+' TP[0] = 60
+' counter = 0
+' While counter < 2
+'   readVal()
+'   PD()
+'   If lightVal[1] <= 120 Then
+'     checkWhite()
+'   EndIf
+' EndWhile
+' reset()
+' returnLeft()
+' Motor.Stop("BC","True")
+' resetKicker()
+' Motor.MoveSync("BC",0,40,180,"True")
+' Motor.Stop("BC","True")
+' readVal()
+' While lightVal[0] >= 120
+'   readVal()
+'   Motor.StartSync("BC",0,40)
+' EndWhile
+' reset()
+' readVal()
+' While lightVal[0] <= 120
+'   readVal()
+'   Motor.StartSync("BC",0,40)
+' EndWhile
+' reset()
 
-collectingCarsFirstSet()
 
-depositingCarsFirstSet()
 
-collectingSecondSet()
 
-depositingCarsSecondset()
+
+' depositing()
+' reset()
+' Motor.MoveSync("BC",0,25,200,"True")
+' readVal()
+' While lightVal[1] >= 100
+'   readVal()
+'   Motor.StartSync("BC",0,25)
+' EndWhile
+' reset()
+' Motor.MoveSync("BC",0,25,40,"True")
+' reset()
+' Motor.ResetCount("BC")
+' motorEncoder_Degree = 260
+' motorEncoder_Speed = 25
+' motorEncoder()
+' Motor.Stop("BC","True")
+' reset()
+' TP[0] = 40
+' Motor.ResetCount("BC")
+' While B_Degree <= 300
+'   readVal()
+'   PDtwo()
+'   B_Degree = Motor.GetCount("B")
+' EndWhile
+' reset()
+' slowClosure()
+' Motor.ResetCount("BC")
+' motorEncoder_Degree = 80
+' motorEncoder_Speed = -25
+' motorEncoder()
+' Motor.Stop("BC","True")
+' reset()
+' OpenKicker()
+' Motor.ResetCount("BC")
+' motorEncoder_Degree = 60
+' motorEncoder_Speed = 10
+' motorEncoder()
+' Motor.Stop("BC","True")
+' resetKicker()
+' reset()
+
+' readVal()
+' While lightVal[1] >= 120 
+'   readVal()
+'   Motor.StartSync("BC",-25,-25)
+' EndWhile
+' reset()
+
+' Motor.ResetCount("BC")
+' motorEncoder_Degree = 40
+' motorEncoder_Speed = -25
+' motorEncoder()
+' Motor.Stop("BC","True")
+' reset()
+
+' lineSquare()
+
+' collectingCarsFirstSet()
+
+' depositingCarsFirstSet()
+
+' collectingSecondSet()
+
+' depositingCarsSecondset()
 ' #########################################################
 Sub OpenKicker
   Motor.Start("AD",100)
@@ -332,7 +318,7 @@ Sub collectionLeft
   EndWhile
   reset()
   Motor.Stop("BC","True")
-  Motor.MoveSync("BC",0,-25,390,"True")
+  Motor.MoveSync("BC",0,-25,380,"True")
   Motor.Stop("BC","True")
   Motor.ResetCount("BC")
   motorEncoder_Degree = 150
@@ -345,7 +331,7 @@ Sub collectionLeft
   Motor.Move("A", 50, 120, "True")
   Motor.ResetCount("BC")
   motorEncoder_Degree = 80
-  motorEncoder_Speed = 25
+  motorEncoder_Speed = 20 
   motorEncoder()
   Motor.Stop("BC","True")
   Motor.Start("A", -30)
@@ -353,7 +339,7 @@ Sub collectionLeft
   Motor.Stop("A", "True")
   Motor.ResetCount("BC")
   motorEncoder_Degree = 10
-  motorEncoder_Speed = 25
+  motorEncoder_Speed = 20
   motorEncoder()
   Motor.Stop("BC","True")
   Motor.ResetCount("BC")
@@ -363,6 +349,17 @@ Sub collectionLeft
   Motor.Stop("BC","True")
   Motor.MoveSync("BC",-25,25,160,"True")
   Motor.Stop("BC","True")
+  readVal()
+  While lightVal[0] >= 120
+    readVal()
+    Motor.StartSync("BC",-25,25)
+  EndWhile
+  reset()
+  readVal()
+  While lightVal[0] <= 120
+    readVal()
+    Motor.StartSync("BC",-25,25)
+  EndWhile
   fullLevel = fullLevel + 1
 EndSub
 
@@ -410,7 +407,7 @@ EndSub
 
 Sub returnLeft
   Motor.ResetCount("BC")
-  motorEncoder_Degree = 80
+  motorEncoder_Degree = 100
   motorEncoder_Speed = 25
   motorEncoder()
   Motor.Stop("BC","True")
@@ -932,5 +929,40 @@ Sub depositingCarsSecondset
 
   returnLeftLeft()
   reset()
+EndSub
+
+Sub collectRedCar
+  counter = 0 
+  While counter < 5
+    readVal()
+    PD()
+    If lightVal[1] <= 120 Then
+      checkWhite()
+    EndIf
+  EndWhile
+  reset()
+  resetKicker()
+  Motor.Stop("BC","True") 'Do not fucking remove
+  collectionLeft()
+  Motor.Stop("BC","True")
+  OpenKicker()
+  Motor.Stop("BC","True")
+  ' Motor.ResetCount("BC")  
+  ' motorEncoder_Degree = 20
+  ' motorEncoder_Speed = 40
+  ' motorEncoder()
+  ' Motor.Stop("BC","True")
+  ' resetKicker()
+  ' Motor.Stop("BC","True")
+  ' Motor.MoveSync("BC",-40,40,260,"True")
+  ' Motor.Stop("BC","True")
+  ' readVal()
+  ' While lightVal[0] <= 100
+  '   readVal()
+  '   Motor.StartSync("BC",0,40)
+  ' EndWhile
+  ' reset()
+  ' Motor.MoveSync("BC",0,40,80,"True")
+  ' Motor.Stop("BC","True")
 EndSub
 '6/9/2021
