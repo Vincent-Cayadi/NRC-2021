@@ -947,22 +947,26 @@ Sub collectRedCar
   Motor.Stop("BC","True")
   OpenKicker()
   Motor.Stop("BC","True")
-  ' Motor.ResetCount("BC")  
-  ' motorEncoder_Degree = 20
-  ' motorEncoder_Speed = 40
-  ' motorEncoder()
-  ' Motor.Stop("BC","True")
-  ' resetKicker()
-  ' Motor.Stop("BC","True")
-  ' Motor.MoveSync("BC",-40,40,260,"True")
-  ' Motor.Stop("BC","True")
-  ' readVal()
-  ' While lightVal[0] <= 100
-  '   readVal()
-  '   Motor.StartSync("BC",0,40)
-  ' EndWhile
-  ' reset()
-  ' Motor.MoveSync("BC",0,40,80,"True")
-  ' Motor.Stop("BC","True")
+  Motor.ResetCount("BC")  
+  motorEncoder_Degree = 20
+  motorEncoder_Speed = 40
+  motorEncoder()
+  Motor.Stop("BC","True")
+  resetKicker()
+  Motor.Stop("BC","True")
+  Motor.MoveSync("BC",-25,25,280,"True")
+  Motor.Stop("BC","True")
+  readVal()
+  While lightVal[0] >= 120
+    readVal()
+    Motor.StartSync("BC",0,25)
+  EndWhile
+  reset()
+  readVal()
+  While lightVal[0] <= 120
+    readVal()
+    Motor.StartSync("BC",0,25)
+  EndWhile
+  reset()
 EndSub
 '6/9/2021
